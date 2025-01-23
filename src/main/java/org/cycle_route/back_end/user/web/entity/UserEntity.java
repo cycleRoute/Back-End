@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.cycle_route.back_end.global.web.entity.TimeEntity;
+import org.cycle_route.back_end.global.web.enums.AccountStatus;
+import org.cycle_route.back_end.global.web.enums.Roles;
 
 @Entity
 @Getter
@@ -21,12 +23,24 @@ public class UserEntity extends TimeEntity {
 
     @NotNull
     @Schema(description = "유저 아이디", example = "test")
-    @Column(name = "user_id", unique = true)
+    @Column(unique = true)
     private String userId;
 
     @NotNull
     @Schema(description = "유저 비밀번호", example = "test")
-    @Column(name = "user_pwd")
     private String userPwd;
 
+    @NotNull
+    @Schema(description = "이름", example = "홍길동")
+    private String name;
+
+    @NotNull
+    @Schema(description = "역할", example = "ROLE_ADMIN")
+    @Enumerated(EnumType.STRING)
+    private Roles userRole;
+
+    @NotNull
+    @Schema(description = "계정 삭제 유무", example = "ACTIVE")
+    @Enumerated(EnumType.STRING)
+    private AccountStatus accountStatus;
 }
