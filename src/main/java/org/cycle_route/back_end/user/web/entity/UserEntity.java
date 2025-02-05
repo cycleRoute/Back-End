@@ -7,6 +7,8 @@ import lombok.*;
 import org.cycle_route.back_end.global.web.entity.TimeEntity;
 import org.cycle_route.back_end.global.web.enums.AccountStatus;
 import org.cycle_route.back_end.global.web.enums.Roles;
+import org.cycle_route.back_end.user.web.dto.auth.SignupDto;
+import org.cycle_route.back_end.user.web.enums.Regions;
 
 @Entity
 @Getter
@@ -35,12 +37,30 @@ public class UserEntity extends TimeEntity {
     private String name;
 
     @NotNull
+    @Schema(description = "활동 지역", example = "경기")
+    private Regions region;
+
+    @NotNull
     @Schema(description = "역할", example = "ROLE_ADMIN")
     @Enumerated(EnumType.STRING)
     private Roles userRole;
+
+    // 프로필 이미지 관련 구현 ( aws 추후 구현 예정 )
 
     @NotNull
     @Schema(description = "계정 삭제 유무", example = "ACTIVE")
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
+
+
+    public static UserEntity from(SignupDto signupDto, String hashedPwd) {
+        return UserEntity.builder()
+                .userId(signupDto.getUserid())
+                .userPwd(hashedPwd)
+                .name(signupDto.getName())
+                .region(signupDto.getRegion())
+                .userRole(Roles.ROLE_USER)
+                .accountStatus(AccountStatus.ACTIVE)
+                .build();
+    }
 }
